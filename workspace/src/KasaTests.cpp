@@ -23,6 +23,17 @@ TEST(
     EXPECT_EQ(registry.size(), random_product_count);
 }
 
+TEST(KasaTests,
+     ProductAddition_IgnoreProductOfDuplicateId_ProductNotAddedToRegistry)
+{
+    Registry registry;
+    struct Product productA(1, "MyUniqueProduct", 10.00);
+    struct Product productB(1, "AnotherTotallyDifferentProduct", 67.00);
+    addProduct(registry, productA);
+    addProduct(registry, productB);
+    EXPECT_EQ(registry.size(), 1);
+}
+
 TEST(
   KasaTests,
   ProductInitialization_DefaultProductConstructorMembers_ProductCreatedWithNonParameterConstructorGivesDefaultMembers)
