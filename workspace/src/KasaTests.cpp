@@ -22,3 +22,17 @@ TEST(
     }
     EXPECT_EQ(registry.size(), random_product_count);
 }
+
+TEST(
+  KasaTests,
+  ProductInitialization_DefaultProductConstructorMembers_ProductCreatedWithNonParameterConstructorGivesDefaultMembers)
+{
+    Registry registry;
+    struct Product default_product;
+    // Although there are multiple things checked here, breaking AAA rule
+    //  I decided they are logically connected to each other, so breaking
+    //  them up into multiple tests would not be ideal
+    EXPECT_EQ(default_product.id, 0);
+    EXPECT_EQ(default_product.name, "");
+    EXPECT_EQ(default_product.price, 0.0);
+}

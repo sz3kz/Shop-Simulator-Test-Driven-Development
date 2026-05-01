@@ -4,9 +4,11 @@
 
 struct Product
 {
-    long id;
-    std::string name;
-    double price;
+    long id{ 0 };
+    std::string name{ "" };
+    double price{ 0 };
+
+    Product() = default;
 };
 
 using Registry = std::vector<Product>;
