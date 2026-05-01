@@ -276,6 +276,26 @@ TEST(
     EXPECT_EQ(registry.promotions.at(10).is_active, false);
 }
 
+TEST(KasaTests,
+     ProductPromotions_PromotionActivation_RegistryCorrectlyActivatesPromotion)
+{
+    Registry registry;
+    registry.add_promotion(10, 5);
+    registry.activate_promotion(10);
+    EXPECT_EQ(registry.promotions.at(10).is_active, true);
+}
+
+TEST(
+  KasaTests,
+  ProductPromotions_PromotionActivation_RegistryCorrectlyDeactivatesPromotion)
+{
+    Registry registry;
+    registry.add_promotion(10, 5);
+    registry.activate_promotion(10);
+    registry.deactivate_promotion(10);
+    EXPECT_EQ(registry.promotions.at(10).is_active, false);
+}
+
 TEST(KasaTests, demo)
 {
     Registry registry;

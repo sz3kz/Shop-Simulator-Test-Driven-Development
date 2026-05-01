@@ -28,9 +28,28 @@ void Registry::add_promotion(long identity, int nth_free)
                        Promotion(PromotionType::BULK, 0.0, nth_free, false));
 }
 
+void Registry::activate_promotion(long identity)
+{
+    auto iterator = promotions.find(identity);
+    if (iterator == promotions.end())
+    {
+        return;
+    }
+    Promotion promotion = iterator->second;
+    promotion.is_active = true;
+    promotions[identity] = promotion;
+}
+
 void Registry::deactivate_promotion(long identity)
 {
-    promotions.erase(identity);
+    auto iterator = promotions.find(identity);
+    if (iterator == promotions.end())
+    {
+        return;
+    }
+    Promotion promotion = iterator->second;
+    promotion.is_active = false;
+    promotions[identity] = promotion;
 }
 
 void Registry::del(long identifier)
