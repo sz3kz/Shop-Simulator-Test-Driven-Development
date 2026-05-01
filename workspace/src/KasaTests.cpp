@@ -296,6 +296,37 @@ TEST(
     EXPECT_EQ(registry.promotions.at(10).is_active, false);
 }
 
+TEST(
+  KasaTests,
+  ProductPromotions_PromotionStatusUpdateViaLoyaltyCard_RegistryCorrectlyActivatesPromotionsBasedOnActivatedLoyaltyCard)
+{
+    Registry registry;
+    registry.add_promotion(10, 5);
+    registry.add_promotion(9, 0.2);
+    registry.activate_loyalty_card();
+    registry.update_promotion_status();
+    EXPECT_EQ(registry.promotions.at(10).is_active, true);
+    EXPECT_EQ(registry.promotions.at(9).is_active, true);
+}
+
+TEST(
+  KasaTests,
+  ProductPromotions_PromotionStatusUpdateViaLoyaltyCard_RegistryCorrectlyActivatesPromotionsBasedOnDeactivatedLoyaltyCard)
+{
+    Registry registry;
+    registry.add_promotion(10, 5);
+    registry.add_promotion(9, 0.2);
+
+    registry.activate_loyalty_card();
+    registry.update_promotion_status();
+
+    registry.deactivate_loyalty_card();
+    registry.update_promotion_status();
+
+    EXPECT_EQ(registry.promotions.at(10).is_active, false);
+    EXPECT_EQ(registry.promotions.at(9).is_active, false);
+}
+
 TEST(KasaTests, demo)
 {
     Registry registry;

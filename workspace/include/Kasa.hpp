@@ -50,6 +50,7 @@ struct Registry
     void add_promotion(long identity, int nth_free);
     void activate_promotion(long identity);
     void deactivate_promotion(long identity);
+    void update_promotion_status();
     void del(long identifier);
     [[nodiscard]] auto getEntryCount() const -> size_t;
     void print() const;

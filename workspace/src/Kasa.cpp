@@ -16,6 +16,21 @@ void Registry::deactivate_loyalty_card()
     loyalty_card_active = false;
 }
 
+void Registry::update_promotion_status()
+{
+    for (auto const& pair : promotions)
+    {
+        if (loyalty_card_active)
+        {
+            activate_promotion(pair.first);
+        }
+        else
+        {
+            deactivate_promotion(pair.first);
+        }
+    }
+}
+
 void Registry::add_promotion(long identity, double discount)
 {
     promotions.emplace(identity,
