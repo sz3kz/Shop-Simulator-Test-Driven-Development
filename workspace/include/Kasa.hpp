@@ -19,3 +19,4 @@ struct Product
 using Registry = std::vector<Product>;
 
 void addProduct(Registry& registry, struct Product const& product);
+void deleteProduct(Registry& registry, double id);

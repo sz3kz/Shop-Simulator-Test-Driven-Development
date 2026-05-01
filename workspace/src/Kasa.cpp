@@ -10,3 +10,16 @@ void addProduct(Registry& registry, struct Product const& product)
         return;
     registry.push_back(product);
 }
+
+void deleteProduct(Registry& registry, double id)
+{
+    auto iterator =
+      std::find_if(registry.begin(),
+                   registry.end(),
+                   [id](auto temp_product) { return temp_product.id == id; });
+    if (iterator == registry.end())
+    {
+        return;
+    }
+    registry.erase(iterator);
+}

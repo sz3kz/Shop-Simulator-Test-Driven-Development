@@ -72,3 +72,25 @@ TEST(
     struct Product product(1, "dummy", expected_price);
     EXPECT_EQ(product.price, expected_price);
 }
+
+TEST(
+  KasaTests,
+  ProductDeletion_RegistrySizeAfterDeletion_RegistrySizeIsDecrementedAfterDeletingOneProduct)
+{
+    Registry registry;
+    std::random_device my_random_device;
+    std::mt19937 my_generator(my_random_device());
+    std::uniform_int_distribution<> distr(1, 100);
+    int random_product_count = distr(my_generator);
+
+    for (int i = 0; i < random_product_count; ++i)
+    {
+        struct Product temp_product;
+        temp_product.id = i + 10;
+        temp_product.name = "Product";
+        temp_product.price = 10.00;
+        addProduct(registry, temp_product);
+    }
+    deleteProduct(registry, registry.at(0).id);
+    EXPECT_EQ(registry.size(), random_product_count - 1);
+}
