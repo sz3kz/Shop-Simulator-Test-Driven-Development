@@ -27,7 +27,6 @@ TEST(
   KasaTests,
   ProductInitialization_DefaultProductConstructorMembers_ProductCreatedWithNonParameterConstructorGivesDefaultMembers)
 {
-    Registry registry;
     struct Product default_product;
     // Although there are multiple things checked here, breaking AAA rule
     //  I decided they are logically connected to each other, so breaking
@@ -35,4 +34,30 @@ TEST(
     EXPECT_EQ(default_product.id, 0);
     EXPECT_EQ(default_product.name, "");
     EXPECT_EQ(default_product.price, 0.0);
+}
+
+TEST(
+  KasaTests,
+  ProductInitialization_ProductParameteredConstructorMembers_ProductConstructorIdParameterMatchesObjectMember)
+{
+    double expected_id = 10;
+    struct Product product(expected_id, "dummy", 1.00);
+    EXPECT_EQ(product.id, expected_id);
+}
+TEST(
+  KasaTests,
+  ProductInitialization_ProductParameteredConstructorMembers_ProductConstructorNameParameterMatchesObjectMember)
+{
+    std::string expected_name = "product";
+    struct Product product(1, expected_name, 1.00);
+    EXPECT_EQ(product.name, expected_name);
+}
+
+TEST(
+  KasaTests,
+  ProductInitialization_ProductParameteredConstructorMembers_ProductConstructorPriceParameterMatchesObjectMember)
+{
+    double expected_price = 10.00;
+    struct Product product(1, "dummy", expected_price);
+    EXPECT_EQ(product.price, expected_price);
 }

@@ -9,6 +9,11 @@ struct Product
     double price{ 0 };
 
     Product() = default;
+
+    Product(long product_id, std::string product_name, double product_price)
+      : id(product_id)
+      , name(product_name)
+      , price(product_price) {};
 };
 
 using Registry = std::vector<Product>;
