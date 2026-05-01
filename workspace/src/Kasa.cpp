@@ -3,46 +3,28 @@
 
 void registerProduct(Registry& registry, struct Product const& product)
 {
-    if (std::any_of(registry.begin(),
-                    registry.end(),
-                    [product](auto temp_product)
-                    { return temp_product.id == product.id; }))
-        return;
-    registry.push_back(product);
+    registry.emplace(product.identifier, product);
 }
 
-void deregisterProduct(Registry& registry, double id)
+void deregisterProduct(Registry& registry, long identifier)
 {
-    auto iterator =
-      std::find_if(registry.begin(),
-                   registry.end(),
-                   [id](auto temp_product) { return temp_product.id == id; });
-    if (iterator == registry.end())
+    registry.erase(identifier);
+}
+
+void cartAddProduct(Registry const& registry, Cart& cart, long identifier)
+{
+    if (registry.contains(identifier))
     {
-        return;
+        cart.push_back(identifier);
     }
-    registry.erase(iterator);
 }
 
-void cartAddProduct(Registry const& registry, Cart& cart, double id)
+void cartDeleteProduct(Cart& cart, long identifier)
 {
-    auto iterator =
-      std::find_if(registry.begin(),
-                   registry.end(),
-                   [id](auto temp_product) { return temp_product.id == id; });
-    if (iterator == registry.end())
-    {
-        return;
-    }
-    cart.push_back(id);
-}
-
-void cartDeleteProduct(Cart& cart, double id)
-{
-    auto iterator =
-      std::find_if(cart.begin(),
-                   cart.end(),
-                   [id](auto current_id) { return current_id == id; });
+    auto iterator = std::find_if(cart.begin(),
+                                 cart.end(),
+                                 [identifier](auto current_identifier)
+                                 { return current_identifier == identifier; });
     if (iterator == cart.end())
     {
         return;

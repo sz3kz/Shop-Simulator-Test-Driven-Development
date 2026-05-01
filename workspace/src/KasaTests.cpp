@@ -12,12 +12,14 @@ TEST(
     std::uniform_int_distribution<> distr(1, 100);
     int random_product_count = distr(my_generator);
 
+    double price = 10.00;
+    long identifier_aplifier = 10;
     for (int i = 0; i < random_product_count; ++i)
     {
         struct Product temp_product;
-        temp_product.id = i + 10;
+        temp_product.identifier = static_cast<long>(i * identifier_aplifier);
         temp_product.name = "Product";
-        temp_product.price = 10.00;
+        temp_product.price = price;
         registerProduct(registry, temp_product);
     }
     EXPECT_EQ(registry.size(), random_product_count);
@@ -27,10 +29,14 @@ TEST(KasaTests,
      ProductRegistration_IgnoreProductOfDuplicateId_ProductNotAddedToRegistry)
 {
     Registry registry;
-    struct Product productA(1, "MyUniqueProduct", 10.00);
-    struct Product productB(1, "AnotherTotallyDifferentProduct", 67.00);
-    registerProduct(registry, productA);
-    registerProduct(registry, productB);
+    long duplicate_identifier = 1;
+    double random_price = 67.00;
+    struct Product product_a(
+      duplicate_identifier, "MyUniqueProduct", random_price);
+    struct Product product_b(
+      duplicate_identifier, "AnotherTotallyDifferentProduct", random_price);
+    registerProduct(registry, product_a);
+    registerProduct(registry, product_b);
     EXPECT_EQ(registry.size(), 1);
 }
 
@@ -42,7 +48,7 @@ TEST(
     // Although there are multiple things checked here, breaking AAA rule
     //  I decided they are logically connected to each other, so breaking
     //  them up into multiple tests would not be ideal
-    EXPECT_EQ(default_product.id, 0);
+    EXPECT_EQ(default_product.identifier, 0);
     EXPECT_EQ(default_product.name, "");
     EXPECT_EQ(default_product.price, 0.0);
 }
@@ -51,9 +57,9 @@ TEST(
   KasaTests,
   ProductInitialization_ProductParameteredConstructorMembers_ProductConstructorIdParameterMatchesObjectMember)
 {
-    double expected_id = 10;
-    struct Product product(expected_id, "dummy", 1.00);
-    EXPECT_EQ(product.id, expected_id);
+    long expected_identifier = 10;
+    struct Product product(expected_identifier, "dummy", 1.00);
+    EXPECT_EQ(product.identifier, expected_identifier);
 }
 TEST(
   KasaTests,
@@ -86,12 +92,12 @@ TEST(
     for (int i = 0; i < random_product_count; ++i)
     {
         struct Product temp_product;
-        temp_product.id = i + 10;
+        temp_product.identifier = i + 10;
         temp_product.name = "Product";
         temp_product.price = 10.00;
         registerProduct(registry, temp_product);
     }
-    deregisterProduct(registry, registry.at(0).id);
+    deregisterProduct(registry, registry.begin()->second.identifier);
     EXPECT_EQ(registry.size(), random_product_count - 1);
 }
 
@@ -159,7 +165,6 @@ TEST(
     cartDeleteProduct(cart, 1);
     EXPECT_EQ(cart.size(), 0);
 }
-
 
 TEST(
   KasaTests,
