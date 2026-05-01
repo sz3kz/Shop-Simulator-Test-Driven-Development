@@ -31,3 +31,13 @@ void cartDeleteProduct(Cart& cart, long identifier)
     }
     cart.erase(iterator);
 }
+
+auto calculateCartValue(Registry const& registry, Cart const& cart) -> double
+{
+    return std::accumulate(
+      cart.begin(),
+      cart.end(),
+      0.0,
+      [registry](auto accumulator, auto identifier)
+      { return accumulator + registry.at(identifier).price; });
+}

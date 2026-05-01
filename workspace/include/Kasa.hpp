@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <numeric>
 #include <string>
 #include <utility>
 #include <vector>
@@ -27,3 +28,4 @@ void registerProduct(Registry& registry, struct Product const& product);
 void deregisterProduct(Registry& registry, long identifier);
 void cartAddProduct(Registry const& registry, Cart& cart, long identifier);
 void cartDeleteProduct(Cart& cart, long identifier);
+auto calculateCartValue(Registry const& registry, Cart const& cart) -> double;
