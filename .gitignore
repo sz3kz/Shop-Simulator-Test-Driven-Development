@@ -31,5 +31,13 @@
 *.out
 *.app
 
-# Formatting
-.clang-format
+# Direnv
+.direnv/
+
+# Course Metadata
+paro_tdd.pdf
+ReadinessList.txt
+
+# Ignore the Doxygen build artifacts
+docs/html/
+docs/latex/

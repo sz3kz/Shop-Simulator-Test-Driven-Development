@@ -1,0 +1,29 @@
+exclude: ^workspace/src/sampleTests\.cpp$
+
+repos:
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v18.1.8
+    hooks:
+      - id: clang-format
+        stages: [pre-commit]
+        additional_dependencies: ["clang-format==18.1.8"]
+        args: ["-i"]
+
+  - repo: https://github.com/pocc/pre-commit-hooks
+    rev: v1.3.5
+    hooks:
+      - id: clang-tidy
+        stages: [pre-push]
+        args: [
+          "-p=./workspace/build/",
+        ]
+      - id: cppcheck
+        stages: [pre-commit]
+        args: [
+          "--enable=all",
+          "-Iworkspace/include",
+          "--suppressions-list=cppcheck-suppresions.txt",
+          "--inline-suppr",
+          "--suppress=missingIncludeSystem",
+          "--suppress=unmatchedSuppression"
+        ]

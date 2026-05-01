@@ -122,21 +122,3 @@ TEST(ComplicatedTest, checkXAndYEqual0)
             &Coords6D::location,
             testing::AllOf(testing::Field("X", &CoordCart::x, 0), testing::Field("Y", &CoordCart::y, 0))));
 }
-
-struct Coords6D
-{
-    CoordCart location;
-    CoordEuler orientation;
-};
-
-TEST(ComplicatedTest, checkXAndYEqual0)
-{
-    Coords6D coords{{0, 0, 35}, {0, PI, PI / 4}};
-
-    EXPECT_THAT(
-        coords,
-        testing::Field(
-            "location",
-            &Coords6D::location,
-            testing::AllOf(testing::Field("X", &CoordCart::x, 0), testing::Field("Y", &CoordCart::y, 0))));
-}
