@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <map>
 #include <numeric>
 #include <string>
@@ -19,6 +20,8 @@ struct Product
       : identifier(product_identifier)
       , name(std::move(product_name))
       , price(product_price) {};
+    friend std::ostream& operator<<(std::ostream& os,
+                                    struct Product const& product);
 };
 
 using Registry = std::map<long, Product>;
@@ -30,3 +33,5 @@ void cartAddProduct(Registry const& registry, Cart& cart, long identifier);
 void cartDeleteProduct(Cart& cart, long identifier);
 auto calculateCartValue(Registry const& registry, Cart const& cart) -> double;
 void cartClose(Cart& cart);
+void printCartProducts(Registry const& registry, Cart const& cart);
+void printRegistryProducts(Registry const& registry);

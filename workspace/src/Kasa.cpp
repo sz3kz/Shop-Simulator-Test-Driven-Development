@@ -49,3 +49,25 @@ void cartClose(Cart& cart)
         cartDeleteProduct(cart, identifier);
     }
 }
+void printCartProducts(Registry const& registry, Cart const& cart)
+{
+    for (auto identifier : cart)
+    {
+        std::cout << registry.at(identifier) << std::endl;
+    }
+}
+
+void printRegistryProducts(Registry const& registry)
+{
+    for (auto const& pair : registry)
+    {
+        std::cout << pair.second << std::endl;
+    }
+}
+
+std::ostream& operator<<(std::ostream& os, struct Product const& product)
+{
+    os << "(" << product.identifier << "|\"" << product.name << "\"|"
+       << product.price << ")";
+    return os;
+}
