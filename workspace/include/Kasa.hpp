@@ -24,13 +24,31 @@ struct Product
                            struct Product const& product) -> std::ostream&;
 };
 
+enum class PromotionType
+{
+    DISCOUNT, // price is lowever by price * DISCOUNT
+    BULK      // for every n products, 1 is free
+};
+
+struct Promotion
+{
+    PromotionType promotion;
+    double discount{ 0.0 };
+    int nth_free{ 0 };
+    bool is_active{ false };
+};
+
 struct Registry
 {
     std::map<long, Product> contents;
+    std::map<long, Promotion> promotions;
     bool loyalty_card_active{ false };
     void add(struct Product const& product);
     void activate_loyalty_card();
     void deactivate_loyalty_card();
+    void add_promotion(long identity, double discount);
+    void add_promotion(long identity, int nth_free);
+    void deactivate_promotion(long identity);
     void del(long identifier);
     [[nodiscard]] auto getEntryCount() const -> size_t;
     void print() const;

@@ -252,6 +252,30 @@ TEST(
     EXPECT_EQ(registry.loyalty_card_active, false);
 }
 
+TEST(
+  KasaTests,
+  ProductPromotions_PromotionRegistration_RegistryCorrectlyRegistersDiscountPromotion)
+{
+    Registry registry;
+    registry.add_promotion(10, 0.2);
+    EXPECT_EQ(registry.promotions.at(10).promotion, PromotionType::DISCOUNT);
+    EXPECT_EQ(registry.promotions.at(10).discount, 0.2);
+    EXPECT_EQ(registry.promotions.at(10).nth_free, 0);
+    EXPECT_EQ(registry.promotions.at(10).is_active, false);
+}
+
+TEST(
+  KasaTests,
+  ProductPromotions_PromotionRegistration_RegistryCorrectlyRegistersBulkPromotion)
+{
+    Registry registry;
+    registry.add_promotion(10, 5);
+    EXPECT_EQ(registry.promotions.at(10).promotion, PromotionType::BULK);
+    EXPECT_EQ(registry.promotions.at(10).discount, 0.0);
+    EXPECT_EQ(registry.promotions.at(10).nth_free, 5);
+    EXPECT_EQ(registry.promotions.at(10).is_active, false);
+}
+
 TEST(KasaTests, demo)
 {
     Registry registry;

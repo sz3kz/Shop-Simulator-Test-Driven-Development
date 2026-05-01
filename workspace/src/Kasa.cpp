@@ -16,6 +16,23 @@ void Registry::deactivate_loyalty_card()
     loyalty_card_active = false;
 }
 
+void Registry::add_promotion(long identity, double discount)
+{
+    promotions.emplace(identity,
+                       Promotion(PromotionType::DISCOUNT, discount, 0, false));
+}
+
+void Registry::add_promotion(long identity, int nth_free)
+{
+    promotions.emplace(identity,
+                       Promotion(PromotionType::BULK, 0.0, nth_free, false));
+}
+
+void Registry::deactivate_promotion(long identity)
+{
+    promotions.erase(identity);
+}
+
 void Registry::del(long identifier)
 {
     contents.erase(identifier);
