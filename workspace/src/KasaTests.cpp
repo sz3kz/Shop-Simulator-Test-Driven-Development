@@ -168,7 +168,19 @@ TEST(
 
 TEST(
   KasaTests,
-  ProductCartDeletion_DeletingInvalidProduct_PopulatedCartSizeStaysTheSameWhenDeletingInvalidProduct)
+  ProductCartDeletion_DeletingRegisteredProductFromEmptyCart_EmptyCartDoesNotChangeSizeWhenDeletingRegisteredProduct)
+{
+    Registry registry;
+    Cart cart;
+
+    registerProduct(registry, { 1, "apple", 5.00 });
+    cartDeleteProduct(cart, 1);
+    EXPECT_EQ(cart.size(), 0);
+}
+
+TEST(
+  KasaTests,
+  ProductCartDeletion_DeletingUnregisteredProduct_PopulatedCartSizeStaysTheSameWhenDeletingUnregisteredProduct)
 {
     Registry registry;
     Cart cart;
