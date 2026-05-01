@@ -1,73 +1,88 @@
 #include "Kasa.hpp"
 #include <algorithm>
 
-void registerProduct(Registry& registry, struct Product const& product)
+void Registry::add(struct Product const& product)
 {
-    registry.emplace(product.identifier, product);
+    contents.emplace(product.identifier, product);
 }
 
-void deregisterProduct(Registry& registry, long identifier)
+void Registry::del(long identifier)
 {
-    registry.erase(identifier);
+    contents.erase(identifier);
 }
 
-void cartAddProduct(Registry const& registry, Cart& cart, long identifier)
+[[nodiscard]]
+auto Registry::getEntryCount() const -> size_t
 {
-    if (registry.contains(identifier))
+    return contents.size();
+}
+
+void Registry::print() const
+{
+    for (auto const& pair : contents)
     {
-        cart.push_back(identifier);
+        std::cout << pair.second << '\n';
     }
 }
 
-void cartDeleteProduct(Cart& cart, long identifier)
+void Cart::add(Registry const& registry, long identifier)
 {
-    auto iterator = std::find_if(cart.begin(),
-                                 cart.end(),
+    if (registry.contents.contains(identifier))
+    {
+        contents.push_back(identifier);
+    }
+}
+
+void Cart::del(long identifier)
+{
+    auto iterator = std::find_if(contents.begin(),
+                                 contents.end(),
                                  [identifier](auto current_identifier)
                                  { return current_identifier == identifier; });
-    if (iterator == cart.end())
+    if (iterator == contents.end())
     {
         return;
     }
-    cart.erase(iterator);
+    contents.erase(iterator);
 }
 
-auto calculateCartValue(Registry const& registry, Cart const& cart) -> double
+[[nodiscard]]
+auto Cart::calculateValue(Registry const& registry) const -> double
 {
     return std::accumulate(
-      cart.begin(),
-      cart.end(),
+      contents.begin(),
+      contents.end(),
       0.0,
       [registry](auto accumulator, auto identifier)
-      { return accumulator + registry.at(identifier).price; });
+      { return accumulator + registry.contents.at(identifier).price; });
 }
 
-void cartClose(Cart& cart)
+[[nodiscard]]
+auto Cart::getEntryCount() const -> size_t
 {
-    for (auto identifier : cart)
-    {
-        cartDeleteProduct(cart, identifier);
-    }
-}
-void printCartProducts(Registry const& registry, Cart const& cart)
-{
-    for (auto identifier : cart)
-    {
-        std::cout << registry.at(identifier) << std::endl;
-    }
+    return contents.size();
 }
 
-void printRegistryProducts(Registry const& registry)
+void Cart::close()
 {
-    for (auto const& pair : registry)
+    for (auto identifier : contents)
     {
-        std::cout << pair.second << std::endl;
+        del(identifier);
     }
 }
 
-std::ostream& operator<<(std::ostream& os, struct Product const& product)
+void Cart::print(Registry const& registry) const
 {
-    os << "(" << product.identifier << "|\"" << product.name << "\"|"
-       << product.price << ")";
-    return os;
+    for (auto identifier : contents)
+    {
+        std::cout << registry.contents.at(identifier) << '\n';
+    }
+}
+
+auto operator<<(std::ostream& output_stream,
+                struct Product const& product) -> std::ostream&
+{
+    output_stream << "(" << product.identifier << "|\"" << product.name << "\"|"
+                  << product.price << ")";
+    return output_stream;
 }

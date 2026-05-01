@@ -20,18 +20,26 @@ struct Product
       : identifier(product_identifier)
       , name(std::move(product_name))
       , price(product_price) {};
-    friend std::ostream& operator<<(std::ostream& os,
-                                    struct Product const& product);
+    friend auto operator<<(std::ostream& output_stream,
+                           struct Product const& product) -> std::ostream&;
 };
 
-using Registry = std::map<long, Product>;
-using Cart = std::vector<long>;
+struct Registry
+{
+    std::map<long, Product> contents;
+    void add(struct Product const& product);
+    void del(long identifier);
+    [[nodiscard]] auto getEntryCount() const -> size_t;
+    void print() const;
+};
 
-void registerProduct(Registry& registry, struct Product const& product);
-void deregisterProduct(Registry& registry, long identifier);
-void cartAddProduct(Registry const& registry, Cart& cart, long identifier);
-void cartDeleteProduct(Cart& cart, long identifier);
-auto calculateCartValue(Registry const& registry, Cart const& cart) -> double;
-void cartClose(Cart& cart);
-void printCartProducts(Registry const& registry, Cart const& cart);
-void printRegistryProducts(Registry const& registry);
+struct Cart
+{
+    std::vector<long> contents;
+    void add(Registry const& registry, long identifier);
+    void del(long identifier);
+    [[nodiscard]] auto calculateValue(Registry const& registry) const -> double;
+    [[nodiscard]] auto getEntryCount() const -> size_t;
+    void close();
+    void print(Registry const& registry) const;
+};

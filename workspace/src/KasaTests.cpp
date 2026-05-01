@@ -20,9 +20,9 @@ TEST(
         temp_product.identifier = static_cast<long>(i * identifier_aplifier);
         temp_product.name = "Product";
         temp_product.price = price;
-        registerProduct(registry, temp_product);
+        registry.add(temp_product);
     }
-    EXPECT_EQ(registry.size(), random_product_count);
+    EXPECT_EQ(registry.getEntryCount(), random_product_count);
 }
 
 TEST(KasaTests,
@@ -35,9 +35,9 @@ TEST(KasaTests,
       duplicate_identifier, "MyUniqueProduct", random_price);
     struct Product product_b(
       duplicate_identifier, "AnotherTotallyDifferentProduct", random_price);
-    registerProduct(registry, product_a);
-    registerProduct(registry, product_b);
-    EXPECT_EQ(registry.size(), 1);
+    registry.add(product_a);
+    registry.add(product_b);
+    EXPECT_EQ(registry.getEntryCount(), 1);
 }
 
 TEST(
@@ -95,10 +95,10 @@ TEST(
         temp_product.identifier = i + 10;
         temp_product.name = "Product";
         temp_product.price = 10.00;
-        registerProduct(registry, temp_product);
+        registry.add(temp_product);
     }
-    deregisterProduct(registry, registry.begin()->second.identifier);
-    EXPECT_EQ(registry.size(), random_product_count - 1);
+    registry.del(registry.contents.begin()->second.identifier);
+    EXPECT_EQ(registry.getEntryCount(), random_product_count - 1);
 }
 
 TEST(
@@ -108,9 +108,9 @@ TEST(
     Registry registry;
     Cart cart;
 
-    registerProduct(registry, { 1, "apple", 5.00 });
-    cartAddProduct(registry, cart, 1);
-    EXPECT_EQ(cart.size(), 1);
+    registry.add({ 1, "apple", 5.00 });
+    cart.add(registry, 1);
+    EXPECT_EQ(cart.getEntryCount(), 1);
 }
 
 TEST(
@@ -119,8 +119,8 @@ TEST(
 {
     Registry registry;
     Cart cart;
-    cartAddProduct(registry, cart, 1);
-    EXPECT_EQ(cart.size(), 0);
+    cart.add(registry, 1);
+    EXPECT_EQ(cart.getEntryCount(), 0);
 }
 
 TEST(KasaTests, ProductCartAddition_AddProductOfDuplicateId_ProductAddedToCart)
@@ -128,10 +128,10 @@ TEST(KasaTests, ProductCartAddition_AddProductOfDuplicateId_ProductAddedToCart)
     Registry registry;
     Cart cart;
 
-    registerProduct(registry, { 1, "apple", 5.00 });
-    cartAddProduct(registry, cart, 1);
-    cartAddProduct(registry, cart, 1);
-    EXPECT_EQ(cart.size(), 2);
+    registry.add({ 1, "apple", 5.00 });
+    cart.add(registry, 1);
+    cart.add(registry, 1);
+    EXPECT_EQ(cart.getEntryCount(), 2);
 }
 
 TEST(
@@ -145,12 +145,12 @@ TEST(
     std::uniform_int_distribution<> distr(1, 100);
     int random_product_count = distr(my_generator);
 
-    registerProduct(registry, { 1, "apple", 5.00 });
+    registry.add({ 1, "apple", 5.00 });
     for (int i = 0; i < random_product_count; ++i)
     {
-        cartAddProduct(registry, cart, 1);
+        cart.add(registry, 1);
     }
-    EXPECT_EQ(cart.size(), random_product_count);
+    EXPECT_EQ(cart.getEntryCount(), random_product_count);
 }
 
 TEST(
@@ -160,10 +160,10 @@ TEST(
     Registry registry;
     Cart cart;
 
-    registerProduct(registry, { 1, "apple", 5.00 });
-    cartAddProduct(registry, cart, 1);
-    cartDeleteProduct(cart, 1);
-    EXPECT_EQ(cart.size(), 0);
+    registry.add({ 1, "apple", 5.00 });
+    cart.add(registry, 1);
+    cart.del(1);
+    EXPECT_EQ(cart.getEntryCount(), 0);
 }
 
 TEST(
@@ -173,9 +173,9 @@ TEST(
     Registry registry;
     Cart cart;
 
-    registerProduct(registry, { 1, "apple", 5.00 });
-    cartDeleteProduct(cart, 1);
-    EXPECT_EQ(cart.size(), 0);
+    registry.add({ 1, "apple", 5.00 });
+    cart.del(1);
+    EXPECT_EQ(cart.getEntryCount(), 0);
 }
 
 TEST(
@@ -185,10 +185,10 @@ TEST(
     Registry registry;
     Cart cart;
 
-    registerProduct(registry, { 1, "apple", 5.00 });
-    cartAddProduct(registry, cart, 1);
-    cartDeleteProduct(cart, 2);
-    EXPECT_EQ(cart.size(), 1);
+    registry.add({ 1, "apple", 5.00 });
+    cart.add(registry, 1);
+    cart.del(2);
+    EXPECT_EQ(cart.getEntryCount(), 1);
 }
 
 TEST(
@@ -196,7 +196,7 @@ TEST(
   ProductCartTotalCalcuation_ExampleCartTotalCalculation_ProperlyCalculateExampleCart)
 {
     Registry registry;
-    registerProduct(registry, { 1, "apple", 5.00 });
+    registry.add({ 1, "apple", 5.00 });
     Cart cart;
     std::random_device my_random_device;
     std::mt19937 my_generator(my_random_device());
@@ -206,10 +206,10 @@ TEST(
     double price = 5.00;
     for (int _ = 0; _ < random_product_count; ++_)
     {
-        cartAddProduct(registry, cart, 1);
+        cart.add(registry, 1);
     }
 
-    EXPECT_EQ(calculateCartValue(registry, cart), price * random_product_count);
+    EXPECT_EQ(cart.calculateValue(registry), price * random_product_count);
 }
 
 TEST(
@@ -217,7 +217,7 @@ TEST(
   ProductCartClosing_RandomizedCartLengthClosing_CartIsFullyEmptiedByDeletingEveryProductIdentifier)
 {
     Registry registry;
-    registerProduct(registry, { 1, "apple", 5.00 });
+    registry.add({ 1, "apple", 5.00 });
     Cart cart;
     std::random_device my_random_device;
     std::mt19937 my_generator(my_random_device());
@@ -226,26 +226,26 @@ TEST(
 
     for (int _ = 0; _ < random_product_count; ++_)
     {
-        cartAddProduct(registry, cart, 1);
+        cart.add(registry, 1);
     }
-    cartClose(cart);
+    cart.close();
 
-    EXPECT_EQ(cart.size(), 0);
+    EXPECT_EQ(cart.getEntryCount(), 0);
 }
 TEST(KasaTests, demo)
 {
     Registry registry;
-    registerProduct(registry, { 1, "apple", 5.300 });
-    registerProduct(registry, { 2, "banana", 15.00 });
-    registerProduct(registry, { 3, "kiwi", 3.00 });
+    registry.add({ 1, "apple", 5.300 });
+    registry.add({ 2, "banana", 15.00 });
+    registry.add({ 3, "kiwi", 3.00 });
     Cart cart;
-    cartAddProduct(registry, cart, 1);
-    cartAddProduct(registry, cart, 3);
+    cart.add(registry, 1);
+    cart.add(registry, 3);
     std::cout << "Registered Items:" << std::endl;
-    printRegistryProducts(registry);
+    registry.print();
     std::cout << "Selected Items:" << std::endl;
-    printCartProducts(registry, cart);
-    std::cout << "Current Total: " << calculateCartValue(registry, cart)
+    cart.print(registry);
+    std::cout << "Current Total: " << cart.calculateValue(registry)
               << std::endl;
     int choice;
     while (true)
@@ -285,7 +285,7 @@ TEST(KasaTests, demo)
                 std::getline(std::cin, name);
                 std::cout << "Enter Price: ";
                 std::cin >> price;
-                registerProduct(registry, { identifier, name, price });
+                registry.add({ identifier, name, price });
                 std::cout << "Product registered successfully.\n";
                 break;
             }
@@ -295,7 +295,7 @@ TEST(KasaTests, demo)
                 long identifier;
                 std::cout << "Enter Product ID to deregister: ";
                 std::cin >> identifier;
-                deregisterProduct(registry, identifier);
+                registry.del(identifier);
                 break;
             }
 
@@ -304,7 +304,7 @@ TEST(KasaTests, demo)
                 long identifier;
                 std::cout << "Enter Product ID to add to cart: ";
                 std::cin >> identifier;
-                cartAddProduct(registry, cart, identifier);
+                cart.add(registry, identifier);
                 break;
             }
 
@@ -313,20 +313,20 @@ TEST(KasaTests, demo)
                 long identifier;
                 std::cout << "Enter Product ID to remove from cart: ";
                 std::cin >> identifier;
-                cartDeleteProduct(cart, identifier);
+                cart.del(identifier);
                 break;
             }
 
             case 5:
             {
                 std::cout << "Current Cart Value: "
-                          << calculateCartValue(registry, cart) << "\n";
+                          << cart.calculateValue(registry) << "\n";
                 break;
             }
 
             case 6:
             {
-                cartClose(cart);
+                cart.close();
                 std::cout << "Cart has been closed/cleared.\n";
                 break;
             }
@@ -334,14 +334,14 @@ TEST(KasaTests, demo)
             case 7:
             {
                 std::cout << "Currently selected products:" << std::endl;
-                printCartProducts(registry, cart);
+                cart.print(registry);
                 break;
             }
 
             case 8:
             {
                 std::cout << "Currently registered products:" << std::endl;
-                printRegistryProducts(registry);
+                registry.print();
                 break;
             }
 
