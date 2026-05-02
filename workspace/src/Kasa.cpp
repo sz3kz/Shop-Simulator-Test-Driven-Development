@@ -95,8 +95,20 @@ void Registry::print_promotions() const
     }
 }
 
-void Cart::add(Registry const& registry, long identifier)
+void Cart::add(Registry& registry, long identifier)
 {
+    if (identifier == loyalty_card_identifier)
+    {
+        if (registry.loyalty_card_active == false)
+        {
+            registry.activate_loyalty_card();
+        }
+        else
+        {
+            registry.deactivate_loyalty_card();
+        }
+        registry.update_promotion_status();
+    }
     if (registry.contents.contains(identifier))
     {
         contents.push_back(identifier);
@@ -186,12 +198,13 @@ auto Cart::getEntryCount() const -> size_t
     return contents.size();
 }
 
-void Cart::close()
+void Cart::close(Registry& registry)
 {
     for (auto identifier : contents)
     {
         del(identifier);
     }
+    registry.deactivate_loyalty_card();
 }
 
 void Cart::print(Registry const& registry) const

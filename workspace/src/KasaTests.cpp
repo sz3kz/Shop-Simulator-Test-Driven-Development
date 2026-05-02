@@ -280,7 +280,7 @@ TEST(
     {
         cart.add(registry, 1);
     }
-    cart.close();
+    cart.close(registry);
 
     EXPECT_EQ(cart.getEntryCount(), 0);
 }
@@ -377,6 +377,40 @@ TEST(
 
     EXPECT_EQ(registry.promotions.at(10).is_active, false);
     EXPECT_EQ(registry.promotions.at(9).is_active, false);
+}
+
+TEST(
+  KasaTests,
+  ProductCardAddition_RegisteringCardViaProductAdd_LoyaltyCardActivatesWhenRegisteringCorrectIdentifier)
+{
+    Registry registry;
+    Cart cart;
+    registry.add_promotion(10, 5);
+    cart.add(registry, loyalty_card_identifier);
+    EXPECT_EQ(registry.promotions.at(10).is_active, true);
+}
+
+TEST(
+  KasaTests,
+  ProductCardAddition_UnregisteringCardViaProductAdd_LoyaltyCardDeactivatesWhenRegisteringCorrectIdentifier)
+{
+    Registry registry;
+    Cart cart;
+    registry.add_promotion(10, 5);
+    cart.add(registry, loyalty_card_identifier);
+    cart.add(registry, loyalty_card_identifier);
+    EXPECT_EQ(registry.promotions.at(10).is_active, false);
+}
+
+TEST(
+  KasaTests,
+  ProductCartClosing_LoyaltyCardDeactivation_CardIsDeactivatedWhenClosingCart)
+{
+    Registry registry;
+    Cart cart;
+    cart.add(registry, loyalty_card_identifier);
+    cart.close(registry);
+    EXPECT_EQ(registry.loyalty_card_active, false);
 }
 
 TEST(KasaTests, demo)
@@ -477,7 +511,7 @@ TEST(KasaTests, demo)
 
             case 6:
             {
-                cart.close();
+                cart.close(registry);
                 std::cout << "Cart has been closed/cleared.\n";
                 break;
             }

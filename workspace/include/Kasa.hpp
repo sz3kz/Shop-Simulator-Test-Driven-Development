@@ -6,6 +6,8 @@
 #include <utility>
 #include <vector>
 
+constexpr int loyalty_card_identifier = 9999;
+
 struct Product
 {
     long identifier{ 0 };
@@ -63,10 +65,10 @@ struct Registry
 struct Cart
 {
     std::vector<long> contents;
-    void add(Registry const& registry, long identifier);
+    void add(Registry& registry, long identifier);
     void del(long identifier);
     [[nodiscard]] auto calculateValue(Registry const& registry) const -> double;
     [[nodiscard]] auto getEntryCount() const -> size_t;
-    void close();
+    void close(Registry& registry);
     void print(Registry const& registry) const;
 };
