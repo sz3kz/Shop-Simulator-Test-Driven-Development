@@ -47,6 +47,13 @@ void Registry::add_promotion(long identity, double discount)
 
 void Registry::add_promotion(long identity, int nth_free)
 {
+    // Registers a BULK-type promotion.
+    // Only if identifier is of a registered product.
+    auto iterator = contents.find(identity);
+    if (iterator == contents.end())
+    {
+        return;
+    }
     promotions.emplace(
       identity, Promotion(identity, PromotionType::BULK, 0.0, nth_free, false));
 }

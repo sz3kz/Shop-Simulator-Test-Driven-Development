@@ -331,6 +331,7 @@ TEST(
   ProductPromotions_PromotionRegistration_RegistryCorrectlyRegistersBulkPromotion)
 {
     Registry registry;
+    registry.add({ 10, "apple", 10.00 });
     registry.add_promotion(10, 5);
     EXPECT_EQ(registry.promotions.at(10).type, PromotionType::BULK);
     EXPECT_EQ(registry.promotions.at(10).discount, 0.0);
@@ -338,10 +339,20 @@ TEST(
     EXPECT_EQ(registry.promotions.at(10).is_active, false);
 }
 
+TEST(
+  KasaTests,
+  ProductPromotions_PromotionRegistration_RegistryDoesNotRegisterBulkPromotionForInvalidProduct)
+{
+    Registry registry;
+    registry.add_promotion(10, 3);
+    EXPECT_EQ(registry.promotions.size(), 0);
+}
+
 TEST(KasaTests,
      ProductPromotions_PromotionActivation_RegistryCorrectlyActivatesPromotion)
 {
     Registry registry;
+    registry.add({ 10, "apple", 10.00 });
     registry.add_promotion(10, 5);
     registry.activate_promotion(10);
     EXPECT_EQ(registry.promotions.at(10).is_active, true);
@@ -352,6 +363,7 @@ TEST(
   ProductPromotions_PromotionActivation_RegistryCorrectlyDeactivatesPromotion)
 {
     Registry registry;
+    registry.add({ 10, "apple", 10.00 });
     registry.add_promotion(10, 5);
     registry.activate_promotion(10);
     registry.deactivate_promotion(10);
@@ -399,6 +411,7 @@ TEST(
 {
     Registry registry;
     Cart cart;
+    registry.add({ 10, "apple", 10.00 });
     registry.add_promotion(10, 5);
     cart.add(registry, loyalty_card_identifier);
     EXPECT_EQ(registry.promotions.at(10).is_active, true);
@@ -410,6 +423,7 @@ TEST(
 {
     Registry registry;
     Cart cart;
+    registry.add({ 10, "apple", 10.00 });
     registry.add_promotion(10, 5);
     cart.add(registry, loyalty_card_identifier);
     cart.add(registry, loyalty_card_identifier);
