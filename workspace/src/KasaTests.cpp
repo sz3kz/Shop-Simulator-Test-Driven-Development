@@ -214,6 +214,58 @@ TEST(
 
 TEST(
   KasaTests,
+  ProductCartTotalCalcuation_ExampleCartTotalCalculationWithDiscount_ProperlyCalculateExampleCartWithDiscount)
+{
+    Registry registry;
+    registry.add({ 1, "apple", 5.00 });
+    registry.add_promotion(1, 0.2);
+    registry.activate_loyalty_card();
+    registry.update_promotion_status();
+    Cart cart;
+    std::random_device my_random_device;
+    std::mt19937 my_generator(my_random_device());
+    std::uniform_int_distribution<> distr(1, 100);
+    int random_product_count = distr(my_generator);
+
+    double price = 5.00;
+    for (int _ = 0; _ < random_product_count; ++_)
+    {
+        cart.add(registry, 1);
+    }
+
+    EXPECT_EQ(cart.calculateValue(registry),
+              price * random_product_count * (1 - 0.2));
+}
+
+TEST(
+  KasaTests,
+  ProductCartTotalCalcuation_ExampleCartTotalCalculationWithBulk_ProperlyCalculateExampleCartWithBulk)
+{
+    Registry registry;
+    registry.add({ 1, "apple", 5.00 });
+    registry.add_promotion(1, 3);
+    registry.activate_loyalty_card();
+    registry.update_promotion_status();
+    Cart cart;
+    std::random_device my_random_device;
+    std::mt19937 my_generator(my_random_device());
+    std::uniform_int_distribution<> distr(1, 100);
+    int random_product_count = distr(my_generator);
+
+    double price = 5.00;
+    for (int _ = 0; _ < random_product_count; ++_)
+    {
+        cart.add(registry, 1);
+    }
+
+    EXPECT_EQ(cart.calculateValue(registry),
+              (random_product_count -
+               random_product_count / registry.promotions.at(1).nth_free) *
+                price);
+}
+
+TEST(
+  KasaTests,
   ProductCartClosing_RandomizedCartLengthClosing_CartIsFullyEmptiedByDeletingEveryProductIdentifier)
 {
     Registry registry;
