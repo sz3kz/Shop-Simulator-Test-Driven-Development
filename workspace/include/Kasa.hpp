@@ -32,10 +32,13 @@ enum class PromotionType
 
 struct Promotion
 {
-    PromotionType promotion;
+    long identity{ 0 };
+    PromotionType type;
     double discount{ 0.0 };
     int nth_free{ 0 };
     bool is_active{ false };
+    friend auto operator<<(std::ostream& output_stream,
+                           struct Promotion const& promotion) -> std::ostream&;
 };
 
 struct Registry
@@ -54,6 +57,7 @@ struct Registry
     void del(long identifier);
     [[nodiscard]] auto getEntryCount() const -> size_t;
     void print() const;
+    void print_promotions() const;
 };
 
 struct Cart

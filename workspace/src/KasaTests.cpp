@@ -258,7 +258,7 @@ TEST(
 {
     Registry registry;
     registry.add_promotion(10, 0.2);
-    EXPECT_EQ(registry.promotions.at(10).promotion, PromotionType::DISCOUNT);
+    EXPECT_EQ(registry.promotions.at(10).type, PromotionType::DISCOUNT);
     EXPECT_EQ(registry.promotions.at(10).discount, 0.2);
     EXPECT_EQ(registry.promotions.at(10).nth_free, 0);
     EXPECT_EQ(registry.promotions.at(10).is_active, false);
@@ -270,7 +270,7 @@ TEST(
 {
     Registry registry;
     registry.add_promotion(10, 5);
-    EXPECT_EQ(registry.promotions.at(10).promotion, PromotionType::BULK);
+    EXPECT_EQ(registry.promotions.at(10).type, PromotionType::BULK);
     EXPECT_EQ(registry.promotions.at(10).discount, 0.0);
     EXPECT_EQ(registry.promotions.at(10).nth_free, 5);
     EXPECT_EQ(registry.promotions.at(10).is_active, false);
@@ -333,11 +333,15 @@ TEST(KasaTests, demo)
     registry.add({ 1, "apple", 5.300 });
     registry.add({ 2, "banana", 15.00 });
     registry.add({ 3, "kiwi", 3.00 });
+    registry.add_promotion(1, 0.2);
+    registry.add_promotion(3, 3);
     Cart cart;
     cart.add(registry, 1);
     cart.add(registry, 3);
     std::cout << "Registered Items:" << std::endl;
     registry.print();
+    std::cout << "Registered Promotions:" << std::endl;
+    registry.print_promotions();
     std::cout << "Selected Items:" << std::endl;
     cart.print(registry);
     std::cout << "Current Total: " << cart.calculateValue(registry)

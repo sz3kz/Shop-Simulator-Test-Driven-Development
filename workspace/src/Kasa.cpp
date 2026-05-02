@@ -33,14 +33,15 @@ void Registry::update_promotion_status()
 
 void Registry::add_promotion(long identity, double discount)
 {
-    promotions.emplace(identity,
-                       Promotion(PromotionType::DISCOUNT, discount, 0, false));
+    promotions.emplace(
+      identity,
+      Promotion(identity, PromotionType::DISCOUNT, discount, 0, false));
 }
 
 void Registry::add_promotion(long identity, int nth_free)
 {
-    promotions.emplace(identity,
-                       Promotion(PromotionType::BULK, 0.0, nth_free, false));
+    promotions.emplace(
+      identity, Promotion(identity, PromotionType::BULK, 0.0, nth_free, false));
 }
 
 void Registry::activate_promotion(long identity)
@@ -81,6 +82,14 @@ auto Registry::getEntryCount() const -> size_t
 void Registry::print() const
 {
     for (auto const& pair : contents)
+    {
+        std::cout << pair.second << '\n';
+    }
+}
+
+void Registry::print_promotions() const
+{
+    for (auto const& pair : promotions)
     {
         std::cout << pair.second << '\n';
     }
@@ -145,5 +154,23 @@ auto operator<<(std::ostream& output_stream,
 {
     output_stream << "(" << product.identifier << "|\"" << product.name << "\"|"
                   << product.price << ")";
+    return output_stream;
+}
+
+auto operator<<(std::ostream& output_stream,
+                struct Promotion const& promotion) -> std::ostream&
+{
+    if (promotion.type == PromotionType::DISCOUNT)
+    {
+        output_stream << "[ " << (promotion.is_active ? "active" : "inactive")
+                      << " | " << promotion.identity << " -> "
+                      << promotion.discount * 100 << "% OFF! ]";
+    }
+    else
+    {
+        output_stream << "[ " << (promotion.is_active ? "active" : "inactive")
+                      << " | " << promotion.identity << " -> "
+                      << promotion.nth_free - 1 << " +1 GRATIS!! ]";
+    }
     return output_stream;
 }
