@@ -45,10 +45,22 @@ void Registry::add_promotion(long identity, double discount)
       Promotion(identity, PromotionType::DISCOUNT, discount, 0, false));
 }
 
+/**
+ * @brief Registers a new bulk-type promotion for a specific product.
+ * * This function creates and stores a `Promotion` object of type `BULK`
+ * associated with the provided product identifier. The promotion is only
+ * added if the product ID already exists within the registry's contents.
+ * #AIGenerated
+ * * @param identity The unique long identifier of the product to receive the
+ * promotion.
+ * @param nth_free An integer specifying the "buy N, get one free" threshold
+ * (e.g., if nth_free is 3, every 3rd item is free).
+ * * @note If the @p identity is not found in the @c contents map, the function
+ * returns silently without adding a promotion.
+ * * @see Promotion, PromotionType
+ */
 void Registry::add_promotion(long identity, int nth_free)
 {
-    // Registers a BULK-type promotion.
-    // Only if identifier is of a registered product.
     auto iterator = contents.find(identity);
     if (iterator == contents.end())
     {
