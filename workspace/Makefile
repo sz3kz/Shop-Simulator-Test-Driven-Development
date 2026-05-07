@@ -1,20 +1,20 @@
-.PHONY: cmake-clean cmake-init cmake-build test check-with-tidy
+.PHONY: clean init test tidiness-check 
 
 DIRECTORY_BUILD = build/
 BUILD_SYSTEM="Ninja"
 BUILD_SYSTEM_COMMAND=ninja
 
-cmake-clean:
+clean:
 	rm -rf ${DIRECTORY_BUILD}
 
-cmake-init: cmake-clean
+init: clean
 	cmake -S . -B ${DIRECTORY_BUILD} -G ${BUILD_SYSTEM}
 
-cmake-build:
-	cd ${DIRECTORY_BUILD} && ${BUILD_SYSTEM_COMMAND}
-
-test: cmake-build
+test:
 	cd ${DIRECTORY_BUILD} && ${BUILD_SYSTEM_COMMAND} run_tests
 
-check-with-tidy: cmake-build
-	git push --dry-run
+tidiness-check: test
+	git push dummy main --dry-run
+
+upload:
+	git push dummy main
