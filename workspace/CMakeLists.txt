@@ -23,6 +23,7 @@ target_compile_features(kasa PUBLIC cxx_std_23)
 add_executable(kasa_tests 
   src/KasaTests.cpp
   src/ProductTests.cpp
+  src/RegistryTests.cpp
 )
 target_include_directories(kasa_tests PUBLIC include)
 target_compile_features(kasa_tests PUBLIC cxx_std_23)
