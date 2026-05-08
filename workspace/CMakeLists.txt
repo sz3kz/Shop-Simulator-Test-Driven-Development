@@ -25,6 +25,7 @@ add_executable(kasa_tests
   src/ProductTests.cpp
   src/RegistryTests.cpp
   src/CartTests.cpp
+  src/PromotionsTests.cpp
 )
 target_include_directories(kasa_tests PUBLIC include)
 target_compile_features(kasa_tests PUBLIC cxx_std_23)
