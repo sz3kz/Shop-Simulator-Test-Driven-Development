@@ -1,4 +1,5 @@
 #include "Kasa.hpp"
+#include "Product.hpp"
 #include <algorithm>
 
 void Registry::add(struct Product const& product)

@@ -1,4 +1,5 @@
 #include "Kasa.hpp"
+#include "Product.hpp"
 #include <gtest/gtest.h>
 #include <random>
 
