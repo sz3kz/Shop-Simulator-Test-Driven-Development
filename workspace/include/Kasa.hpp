@@ -10,11 +10,9 @@ constexpr int loyalty_card_identifier = 9999;
 
 struct Product
 {
-    long identifier{ 0 };
+    long identifier;
     std::string name;
-    double price{ 0 };
-
-    Product() = default;
+    double price;
 
     Product(long product_identifier,
             std::string product_name,

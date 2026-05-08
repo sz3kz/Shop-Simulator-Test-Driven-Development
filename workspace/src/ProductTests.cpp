@@ -4,19 +4,6 @@
 
 TEST(
   KasaTests,
-  ProductInitialization_DefaultProductConstructorMembers_ProductCreatedWithNonParameterConstructorGivesDefaultMembers)
-{
-    struct Product default_product;
-    // Although there are multiple things checked here, breaking AAA rule
-    //  I decided they are logically connected to each other, so breaking
-    //  them up into multiple tests would not be ideal
-    EXPECT_EQ(default_product.identifier, 0);
-    EXPECT_EQ(default_product.name, "");
-    EXPECT_EQ(default_product.price, 0.0);
-}
-
-TEST(
-  KasaTests,
   ProductInitialization_ProductParameteredConstructorMembers_ProductConstructorIdParameterMatchesObjectMember)
 {
     long expected_identifier = 10;
