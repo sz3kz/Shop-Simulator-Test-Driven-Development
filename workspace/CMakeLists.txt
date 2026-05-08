@@ -15,7 +15,10 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 add_library(kasa
-  src/Kasa.cpp
+  src/Cart.cpp
+  src/Product.cpp
+  src/Promotion.cpp
+  src/Registry.cpp
 )
 target_include_directories(kasa PUBLIC include)
 target_compile_features(kasa PUBLIC cxx_std_23)
@@ -25,7 +28,7 @@ add_executable(kasa_tests
   src/ProductTests.cpp
   src/RegistryTests.cpp
   src/CartTests.cpp
-  src/PromotionsTests.cpp
+  src/PromotionTests.cpp
 )
 target_include_directories(kasa_tests PUBLIC include)
 target_compile_features(kasa_tests PUBLIC cxx_std_23)

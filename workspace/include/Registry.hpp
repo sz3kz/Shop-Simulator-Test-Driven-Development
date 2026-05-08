@@ -1,5 +1,4 @@
 #pragma once
-#include "Kasa.hpp"
 #include "Product.hpp"
 #include "Promotion.hpp"
 #include <map>
