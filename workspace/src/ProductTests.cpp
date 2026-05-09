@@ -41,3 +41,12 @@ TEST(
     struct Product product(10, "The Best deal you have ever seen!", -10.00);
     EXPECT_EQ(product.identifier, invalid_identifier);
 }
+
+TEST(
+  KasaTests,
+  ProductInitialization_ProductLoyaltyCardReservedIdentifier_ProductAssignedPredefinedInvalidIdentifierIfSuppliedIdMatchesReservedIdentifierForLoyaltyCard)
+{
+    struct Product product(
+      loyalty_card_identifier, "The loyalty Card as a product? WTF!", 10.00);
+    EXPECT_EQ(product.identifier, invalid_identifier);
+}

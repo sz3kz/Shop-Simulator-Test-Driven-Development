@@ -6,9 +6,11 @@ long Product::determine_id(long supplied_id,
                            double product_price)
 {
     bool id_negative = (supplied_id <= 0);
+    bool id_loyalty_card_reserved(supplied_id == loyalty_card_identifier);
     bool product_name_empty = (product_name.empty());
     bool product_price_negative = (product_price < 0);
-    if (id_negative || product_name_empty || product_price_negative)
+    if (id_negative || id_loyalty_card_reserved || product_name_empty ||
+        product_price_negative)
     {
         return invalid_identifier;
     }
