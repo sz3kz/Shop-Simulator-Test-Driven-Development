@@ -1,5 +1,4 @@
 #include "Cart.hpp"
-#include "Promotion.hpp"
 #include <algorithm>
 #include <numeric>
 
@@ -7,15 +6,15 @@ void Cart::add(Registry& registry, long identifier)
 {
     if (identifier == loyalty_card_identifier)
     {
-        if (registry.loyalty_card_active == false)
+        if (registry.loyalty_card_active)
         {
-            registry.activate_loyalty_card();
+            registry.deactivateLoyaltyCard();
         }
         else
         {
-            registry.deactivate_loyalty_card();
+            registry.activateLoyaltyCard();
         }
-        registry.update_promotion_status();
+        registry.updatePromotionStatus();
     }
     if (registry.contents.contains(identifier))
     {
@@ -55,42 +54,41 @@ auto Cart::calculateValue(Registry const& registry) const -> double
     // BULK calculation
     for (auto const& [identifier, amount] : identifier2amount)
     {
-        bool identifier_not_associated_with_promotion =
-          (registry.promotions.count(identifier) == 0);
+        bool identifier_associated_with_promotion =
+          (registry.promotions.contains(identifier));
 
-        if (identifier_not_associated_with_promotion)
+        if (!identifier_associated_with_promotion)
         {
             continue;
         }
 
         bool identifier_has_wrong_promotion_type =
           (registry.promotions.at(identifier).type != PromotionType::BULK);
-        bool promotion_not_active =
-          (registry.promotions.at(identifier).is_active == false);
+        bool promotion_active = (registry.promotions.at(identifier).is_active);
 
-        if (identifier_has_wrong_promotion_type || promotion_not_active)
+        if (identifier_has_wrong_promotion_type || !promotion_active)
         {
             continue;
         }
-        total -= (amount / registry.promotions.at(identifier).nth_free) *
-                 registry.contents.at(identifier).price;
+        total -= amount /                                      // NOLINT
+                 registry.promotions.at(identifier).nth_free * // NOLINT
+                 registry.contents.at(identifier).price;       // NOLINT
     }
 
     // DISCOUNT calculation
     for (auto const& [identifier, amount] : identifier2amount)
     {
-        bool identifier_not_associated_with_promotion =
-          (registry.promotions.count(identifier) == 0);
-        if (identifier_not_associated_with_promotion)
+        bool identifier_associated_with_promotion =
+          (registry.promotions.contains(identifier));
+        if (!identifier_associated_with_promotion)
         {
             continue;
         }
         bool identifier_has_wrong_promotion_type =
           (registry.promotions.at(identifier).type != PromotionType::DISCOUNT);
-        bool promotion_not_active =
-          (registry.promotions.at(identifier).is_active == false);
+        bool promotion_active = (registry.promotions.at(identifier).is_active);
 
-        if (identifier_has_wrong_promotion_type || promotion_not_active)
+        if (identifier_has_wrong_promotion_type || !promotion_active)
         {
             continue;
         }
@@ -112,7 +110,7 @@ void Cart::close(Registry& registry)
     {
         del(identifier);
     }
-    registry.deactivate_loyalty_card();
+    registry.deactivateLoyaltyCard();
 }
 
 void Cart::print(Registry const& registry) const
@@ -123,7 +121,7 @@ void Cart::print(Registry const& registry) const
     }
 }
 
-void Cart::print_promotions(Registry const& registry) const
+void Cart::printPromotions(Registry const& registry) const
 {
     for (auto const& [identifier, promotion] : registry.promotions)
     {
@@ -136,19 +134,18 @@ void Cart::print_promotions(Registry const& registry) const
                       << (iterator != contents.end() ? "applicable"
                                                      : "inapplicable")
                       << " | " << promotion.identifier << " -> "
-                      << promotion.discount * 100 << "% OFF! ]" << std::endl;
+                      << promotion.discount * 100 << "% OFF! ]" << '\n';
         }
         else
         {
-            int count =
+            auto count =
               std::count(contents.begin(), contents.end(), identifier);
             std::cout << "[ " << (promotion.is_active ? "unlocked" : "locked")
                       << " | "
                       << (count >= promotion.nth_free ? "applicable"
                                                       : "inapplicable")
                       << " | " << promotion.identifier << " -> "
-                      << promotion.nth_free - 1 << " +1 GRATIS!! ]"
-                      << std::endl;
+                      << promotion.nth_free - 1 << " +1 GRATIS!! ]" << '\n';
         }
     }
 }

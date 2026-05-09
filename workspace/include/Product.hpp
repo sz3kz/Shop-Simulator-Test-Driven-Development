@@ -12,12 +12,12 @@ struct Product
                      std::string product_name,
                      double product_price)
       : identifier(
-          determine_id(product_identifier, product_name, product_price))
+          determineIdentifier(product_identifier, product_name, product_price))
       , name(std::move(product_name))
       , price(product_price) {};
-    static long determine_id(long supplied_id,
-                             std::string const& product_name,
-                             double product_price);
+    static auto determineIdentifier(long supplied_id,
+                                    std::string const& product_name,
+                                    double product_price) -> long;
     friend auto operator<<(std::ostream& output_stream,
                            struct Product const& product) -> std::ostream&;
 };

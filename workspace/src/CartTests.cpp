@@ -170,9 +170,9 @@ TEST(
 {
     Registry registry;
     registry.add(Product(1, "apple", 5.00));
-    registry.add_promotion(1, 0.2);
-    registry.activate_loyalty_card();
-    registry.update_promotion_status();
+    registry.addPromotion(1, 0.2);
+    registry.activateLoyaltyCard();
+    registry.updatePromotionStatus();
     Cart cart;
     std::random_device my_random_device;
     std::mt19937 my_generator(my_random_device());
@@ -195,9 +195,9 @@ TEST(
 {
     Registry registry;
     registry.add(Product(1, "apple", 5.00));
-    registry.add_promotion(1, 3);
-    registry.activate_loyalty_card();
-    registry.update_promotion_status();
+    registry.addPromotion(1, 3);
+    registry.activateLoyaltyCard();
+    registry.updatePromotionStatus();
     Cart cart;
     std::random_device my_random_device;
     std::mt19937 my_generator(my_random_device());
@@ -211,9 +211,10 @@ TEST(
     }
 
     EXPECT_EQ(cart.calculateValue(registry),
-              (random_product_count -
-               random_product_count / registry.promotions.at(1).nth_free) *
-                price);
+              (random_product_count - // NOLINT
+               random_product_count / // NOLINT
+                 registry.promotions.at(1).nth_free) *
+                price); // NOLINT
 }
 
 TEST(
@@ -222,9 +223,9 @@ TEST(
 {
     Registry registry;
     registry.add(Product(1, "apple", 10.00));
-    registry.add_promotion(1, 5);
+    registry.addPromotion(1, 5);
     registry.add(Product(2, "kiwi", 10.00));
-    registry.add_promotion(2, 0.2);
+    registry.addPromotion(2, 0.2);
     registry.add(Product(3, "banana", 10.00));
     Cart cart;
     cart.add(registry, 1);
@@ -235,7 +236,7 @@ TEST(
     cart.add(registry, 2);
     cart.add(registry, 3);
     cart.add(registry, loyalty_card_identifier);
-    registry.update_promotion_status();
+    registry.updatePromotionStatus();
     EXPECT_EQ(cart.calculateValue(registry),
               10.00 * 4 + 10.00 * (1 - 0.2) + 10.00);
 }
@@ -247,14 +248,14 @@ TEST(
     Registry registry;
     Cart cart;
     registry.add(Product(1, "apple", 10.00));
-    registry.add_promotion(1, 5);
+    registry.addPromotion(1, 5);
     cart.add(registry, 1);
     cart.add(registry, 1);
     cart.add(registry, 1);
     cart.add(registry, 1);
     cart.add(registry, 1);
     cart.add(registry, loyalty_card_identifier);
-    registry.update_promotion_status();
+    registry.updatePromotionStatus();
     cart.del(1);
     EXPECT_EQ(cart.calculateValue(registry), 10.00 * 4);
 }
@@ -266,14 +267,14 @@ TEST(
     Registry registry;
     Cart cart;
     registry.add(Product(1, "apple", 0.00));
-    registry.add_promotion(1, 5);
+    registry.addPromotion(1, 5);
     cart.add(registry, 1);
     cart.add(registry, 1);
     cart.add(registry, 1);
     cart.add(registry, 1);
     cart.add(registry, 1);
     cart.add(registry, loyalty_card_identifier);
-    registry.update_promotion_status();
+    registry.updatePromotionStatus();
     EXPECT_EQ(cart.calculateValue(registry), 0.00);
 }
 
@@ -284,10 +285,10 @@ TEST(
     Registry registry;
     Cart cart;
     registry.add(Product(1, "apple", 0.00));
-    registry.add_promotion(1, 0.5);
+    registry.addPromotion(1, 0.5);
     cart.add(registry, 1);
     cart.add(registry, loyalty_card_identifier);
-    registry.update_promotion_status();
+    registry.updatePromotionStatus();
     EXPECT_EQ(cart.calculateValue(registry), 0.00);
 }
 
@@ -297,9 +298,9 @@ TEST(
 {
     Registry registry;
     registry.add(Product(1, "apple", 10.00));
-    registry.add_promotion(1, 5);
+    registry.addPromotion(1, 5);
     registry.add(Product(2, "kiwi", 10.00));
-    registry.add_promotion(2, 0.2);
+    registry.addPromotion(2, 0.2);
     registry.add(Product(3, "banana", 10.00));
     Cart cart;
     cart.add(registry, 1);
@@ -310,9 +311,9 @@ TEST(
     cart.add(registry, 2);
     cart.add(registry, 3);
     cart.add(registry, loyalty_card_identifier);
-    registry.update_promotion_status();
+    registry.updatePromotionStatus();
     cart.add(registry, loyalty_card_identifier);
-    registry.update_promotion_status();
+    registry.updatePromotionStatus();
     EXPECT_EQ(cart.calculateValue(registry), 10.00 * 5 + 10.00 + 10.00);
 }
 
@@ -322,15 +323,15 @@ TEST(
 {
     Registry registry;
     registry.add(Product(1, "apple", 10.00));
-    registry.add_promotion(1, 5);
+    registry.addPromotion(1, 5);
     registry.add(Product(2, "kiwi", 10.00));
-    registry.add_promotion(2, 0.2);
+    registry.addPromotion(2, 0.2);
     registry.add(Product(3, "banana", 10.00));
     Cart cart;
     cart.add(registry, 1);
     cart.add(registry, 1);
     cart.add(registry, loyalty_card_identifier);
-    registry.update_promotion_status();
+    registry.updatePromotionStatus();
     cart.add(registry, 1);
     cart.add(registry, 1);
     cart.add(registry, 1);

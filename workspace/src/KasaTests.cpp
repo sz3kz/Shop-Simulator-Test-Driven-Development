@@ -11,18 +11,18 @@ TEST(KasaTests, printingDeactivatedCard)
     registry.add(Product(1, "apple", 2.00));
     registry.add(Product(2, "banana", 4.00));
     registry.add(Product(3, "kiwi", 8.00));
-    registry.add_promotion(1, 2);
-    registry.add_promotion(2, 0.1);
-    registry.add_promotion(3, 0.1);
+    registry.addPromotion(1, 2);
+    registry.addPromotion(2, 0.1);
+    registry.addPromotion(3, 0.1);
     Cart cart;
     cart.add(registry, 1);
     cart.add(registry, 1);
     cart.add(registry, 2);
-    std::cout << "Registry:" << std::endl;
+    std::cout << "Registry:" << '\n';
     registry.print();
-    std::cout << "Promotions:" << std::endl;
-    cart.print_promotions(registry);
-    std::cout << "Cart:" << std::endl;
+    std::cout << "Promotions:" << '\n';
+    cart.printPromotions(registry);
+    std::cout << "Cart:" << '\n';
     cart.print(registry);
 }
 
@@ -32,19 +32,19 @@ TEST(KasaTests, printingActiveCard)
     registry.add(Product(1, "apple", 2.00));
     registry.add(Product(2, "banana", 4.00));
     registry.add(Product(3, "kiwi", 8.00));
-    registry.add_promotion(1, 2);
-    registry.add_promotion(2, 0.1);
-    registry.add_promotion(3, 0.1);
+    registry.addPromotion(1, 2);
+    registry.addPromotion(2, 0.1);
+    registry.addPromotion(3, 0.1);
     Cart cart;
     cart.add(registry, 1);
     cart.add(registry, 1);
     cart.add(registry, 2);
     cart.add(registry, loyalty_card_identifier);
-    std::cout << "Registry:" << std::endl;
+    std::cout << "Registry:" << '\n';
     registry.print();
-    std::cout << "Promotions:" << std::endl;
-    cart.print_promotions(registry);
-    std::cout << "Cart:" << std::endl;
+    std::cout << "Promotions:" << '\n';
+    cart.printPromotions(registry);
+    std::cout << "Cart:" << '\n';
     cart.print(registry);
 }
 
@@ -60,14 +60,14 @@ TEST(KasaTests, demo)
     Cart cart;
     cart.add(registry, 1);
     cart.add(registry, 3);
-    std::cout << "Registered Items:" << std::endl;
+    std::cout << "Registered Items:" << '\n';
     registry.print();
-    std::cout << "Registered Promotions:" << std::endl;
+    std::cout << "Registered Promotions:" << '\n';
     cart.print_promotions(registry);
-    std::cout << "Selected Items:" << std::endl;
+    std::cout << "Selected Items:" << '\n';
     cart.print(registry);
     std::cout << "Current Total: " << cart.calculateValue(registry)
-              << std::endl;
+              << '\n';
     int choice;
     while (true)
     {
@@ -153,14 +153,14 @@ TEST(KasaTests, demo)
 
             case 7:
             {
-                std::cout << "Currently selected products:" << std::endl;
+                std::cout << "Currently selected products:" << '\n';
                 cart.print(registry);
                 break;
             }
 
             case 8:
             {
-                std::cout << "Currently registered products:" << std::endl;
+                std::cout << "Currently registered products:" << '\n';
                 registry.print();
                 break;
             }

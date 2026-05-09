@@ -9,32 +9,32 @@ void Registry::add(struct Product const& product)
     }
 }
 
-void Registry::activate_loyalty_card()
+void Registry::activateLoyaltyCard()
 {
     loyalty_card_active = true;
 }
 
-void Registry::deactivate_loyalty_card()
+void Registry::deactivateLoyaltyCard()
 {
     loyalty_card_active = false;
 }
 
-void Registry::update_promotion_status()
+void Registry::updatePromotionStatus()
 {
     for (auto const& pair : promotions)
     {
         if (loyalty_card_active)
         {
-            activate_promotion(pair.first);
+            activatePromotion(pair.first);
         }
         else
         {
-            deactivate_promotion(pair.first);
+            deactivatePromotion(pair.first);
         }
     }
 }
 
-void Registry::add_promotion(long identifier, double discount)
+void Registry::addPromotion(long identifier, double discount)
 {
     // Registers a DISCOUNT-type promotion.
     // Only if identifier is of a registered product.
@@ -43,9 +43,8 @@ void Registry::add_promotion(long identifier, double discount)
     {
         return;
     }
-    promotions.emplace(
-      identifier,
-      Promotion(identifier, PromotionType::DISCOUNT, discount, 0, false));
+    promotions.emplace(identifier,
+                       Promotion(PromotionIdentifier(identifier), discount));
 }
 
 /**
@@ -62,19 +61,19 @@ void Registry::add_promotion(long identifier, double discount)
  * function returns silently without adding a promotion.
  * * @see Promotion, PromotionType
  */
-void Registry::add_promotion(long identifier, int nth_free)
+void Registry::addPromotion(long identifier, int nth_free)
 {
     auto iterator = contents.find(identifier);
     if (iterator == contents.end())
     {
         return;
     }
-    promotions.emplace(
-      identifier,
-      Promotion(identifier, PromotionType::BULK, 0.0, nth_free, false));
+
+    promotions.emplace(identifier,
+                       Promotion(PromotionIdentifier(identifier), nth_free));
 }
 
-void Registry::activate_promotion(long identifier)
+void Registry::activatePromotion(long identifier)
 {
     auto iterator = promotions.find(identifier);
     if (iterator == promotions.end())
@@ -83,10 +82,10 @@ void Registry::activate_promotion(long identifier)
     }
     Promotion promotion = iterator->second;
     promotion.is_active = true;
-    promotions[identifier] = promotion;
+    promotions.insert_or_assign(identifier, promotion);
 }
 
-void Registry::deactivate_promotion(long identifier)
+void Registry::deactivatePromotion(long identifier)
 {
     auto iterator = promotions.find(identifier);
     if (iterator == promotions.end())
@@ -95,7 +94,7 @@ void Registry::deactivate_promotion(long identifier)
     }
     Promotion promotion = iterator->second;
     promotion.is_active = false;
-    promotions[identifier] = promotion;
+    promotions.insert_or_assign(identifier, promotion);
 }
 
 void Registry::del(long identifier)

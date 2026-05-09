@@ -9,7 +9,7 @@ TEST(KasaTests,
      Promotions_ActivatingLoyaltyCard_RegistryActivatesLoyaltyCardViaMethod)
 {
     Registry registry;
-    registry.activate_loyalty_card();
+    registry.activateLoyaltyCard();
     EXPECT_EQ(registry.loyalty_card_active, true);
 }
 
@@ -17,8 +17,8 @@ TEST(KasaTests,
      Promotions_DeactivatingLoyaltyCard_RegistryDeactivatesLoyaltyCardViaMethod)
 {
     Registry registry;
-    registry.activate_loyalty_card();
-    registry.deactivate_loyalty_card();
+    registry.activateLoyaltyCard();
+    registry.deactivateLoyaltyCard();
     EXPECT_EQ(registry.loyalty_card_active, false);
 }
 
@@ -28,7 +28,7 @@ TEST(
 {
     Registry registry;
     registry.add(Product(10, "apple", 10.00));
-    registry.add_promotion(10, 0.2);
+    registry.addPromotion(10, 0.2);
     EXPECT_EQ(registry.promotions.at(10).type, PromotionType::DISCOUNT);
     EXPECT_EQ(registry.promotions.at(10).discount, 0.2);
     EXPECT_EQ(registry.promotions.at(10).nth_free, 0);
@@ -40,7 +40,7 @@ TEST(
   Promotions_PromotionRegistration_RegistryDoesNotRegisterDiscountPromotionForInvalidProduct)
 {
     Registry registry;
-    registry.add_promotion(10, 0.2);
+    registry.addPromotion(10, 0.2);
     EXPECT_EQ(registry.promotions.size(), 0);
 }
 
@@ -49,7 +49,7 @@ TEST(KasaTests,
 {
     Registry registry;
     registry.add(Product(10, "apple", 10.00));
-    registry.add_promotion(10, 5);
+    registry.addPromotion(10, 5);
     EXPECT_EQ(registry.promotions.at(10).type, PromotionType::BULK);
     EXPECT_EQ(registry.promotions.at(10).discount, 0.0);
     EXPECT_EQ(registry.promotions.at(10).nth_free, 5);
@@ -61,7 +61,7 @@ TEST(
   Promotions_PromotionRegistration_RegistryDoesNotRegisterBulkPromotionForInvalidProduct)
 {
     Registry registry;
-    registry.add_promotion(10, 3);
+    registry.addPromotion(10, 3);
     EXPECT_EQ(registry.promotions.size(), 0);
 }
 
@@ -71,8 +71,8 @@ TEST(
 {
     Registry registry;
     registry.add(Product(10, "apple", 10.00));
-    registry.add_promotion(10, 0.2);
-    registry.add_promotion(10, 5);
+    registry.addPromotion(10, 0.2);
+    registry.addPromotion(10, 5);
     EXPECT_EQ(registry.promotions.at(10).type, PromotionType::DISCOUNT);
 }
 
@@ -81,8 +81,8 @@ TEST(KasaTests,
 {
     Registry registry;
     registry.add(Product(10, "apple", 10.00));
-    registry.add_promotion(10, 5);
-    registry.activate_promotion(10);
+    registry.addPromotion(10, 5);
+    registry.activatePromotion(10);
     EXPECT_EQ(registry.promotions.at(10).is_active, true);
 }
 
@@ -91,9 +91,9 @@ TEST(KasaTests,
 {
     Registry registry;
     registry.add(Product(10, "apple", 10.00));
-    registry.add_promotion(10, 5);
-    registry.activate_promotion(10);
-    registry.deactivate_promotion(10);
+    registry.addPromotion(10, 5);
+    registry.activatePromotion(10);
+    registry.deactivatePromotion(10);
     EXPECT_EQ(registry.promotions.at(10).is_active, false);
 }
 
@@ -104,10 +104,10 @@ TEST(
     Registry registry;
     registry.add(Product(10, "apple", 10.00));
     registry.add(Product(9, "banana", 10.00));
-    registry.add_promotion(10, 5);
-    registry.add_promotion(9, 0.2);
-    registry.activate_loyalty_card();
-    registry.update_promotion_status();
+    registry.addPromotion(10, 5);
+    registry.addPromotion(9, 0.2);
+    registry.activateLoyaltyCard();
+    registry.updatePromotionStatus();
     EXPECT_EQ(registry.promotions.at(10).is_active, true);
     EXPECT_EQ(registry.promotions.at(9).is_active, true);
 }
@@ -119,14 +119,14 @@ TEST(
     Registry registry;
     registry.add(Product(10, "apple", 10.00));
     registry.add(Product(9, "banana", 10.00));
-    registry.add_promotion(10, 5);
-    registry.add_promotion(9, 0.2);
+    registry.addPromotion(10, 5);
+    registry.addPromotion(9, 0.2);
 
-    registry.activate_loyalty_card();
-    registry.update_promotion_status();
+    registry.activateLoyaltyCard();
+    registry.updatePromotionStatus();
 
-    registry.deactivate_loyalty_card();
-    registry.update_promotion_status();
+    registry.deactivateLoyaltyCard();
+    registry.updatePromotionStatus();
 
     EXPECT_EQ(registry.promotions.at(10).is_active, false);
     EXPECT_EQ(registry.promotions.at(9).is_active, false);
@@ -139,7 +139,7 @@ TEST(
     Registry registry;
     Cart cart;
     registry.add(Product(10, "apple", 10.00));
-    registry.add_promotion(10, 5);
+    registry.addPromotion(10, 5);
     cart.add(registry, loyalty_card_identifier);
     EXPECT_EQ(registry.promotions.at(10).is_active, true);
 }
@@ -151,7 +151,7 @@ TEST(
     Registry registry;
     Cart cart;
     registry.add(Product(10, "apple", 10.00));
-    registry.add_promotion(10, 5);
+    registry.addPromotion(10, 5);
     cart.add(registry, loyalty_card_identifier);
     cart.add(registry, loyalty_card_identifier);
     EXPECT_EQ(registry.promotions.at(10).is_active, false);

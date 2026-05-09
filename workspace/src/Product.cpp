@@ -1,9 +1,9 @@
 #include "Product.hpp"
 #include "World.hpp"
 
-long Product::determine_id(long supplied_id,
-                           std::string const& product_name,
-                           double product_price)
+auto Product::determineIdentifier(long supplied_id,
+                                  std::string const& product_name,
+                                  double product_price) -> long
 {
     bool id_negative = (supplied_id <= 0);
     bool id_loyalty_card_reserved(supplied_id == loyalty_card_identifier);
