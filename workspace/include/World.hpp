@@ -1,6 +1,7 @@
 #pragma once
 
 constexpr int loyalty_card_identifier = 9999;
+constexpr long invalid_identifier = -1;
 
 enum class PromotionType
 {

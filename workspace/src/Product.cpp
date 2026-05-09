@@ -1,4 +1,19 @@
 #include "Product.hpp"
+#include "World.hpp"
+
+long Product::determine_id(long supplied_id,
+                           std::string const& product_name,
+                           double product_price)
+{
+    bool id_negative = (supplied_id <= 0);
+    bool product_name_empty = (product_name.empty());
+    bool product_price_negative = (product_price < 0);
+    if (id_negative || product_name_empty || product_price_negative)
+    {
+        return invalid_identifier;
+    }
+    return supplied_id;
+}
 
 auto operator<<(std::ostream& output_stream,
                 struct Product const& product) -> std::ostream&
