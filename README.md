@@ -7,7 +7,6 @@ Cash Register Functionality Implementation via Test Driven Development.
 ```bash
 git clone git@github.com:sz3kz/tdd-dummy.git
 cd tdd-dummy/workspace
-# direnv allow                              # NixOS - activate environment (cmake, clang, make)
 ```
 2. Depending how you want to use it:
 #### Raw
