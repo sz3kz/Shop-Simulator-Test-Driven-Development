@@ -6,7 +6,7 @@
 
 TEST(
   KasaTests,
-  ProductCartAddition_AddingRegisteredProduct_EmptyCartGainsSizeAfterAddingRegisteredProduct)
+  CartAddition_AddingRegisteredProduct_EmptyCartGainsSizeAfterAddingRegisteredProduct)
 {
     Registry registry;
     Cart cart;
@@ -18,7 +18,7 @@ TEST(
 
 TEST(
   KasaTests,
-  ProductCartAddition_AddingUnregisteredProduct_EmptyCartRemainsEmptyAfterAddingUnregisteredProduct)
+  CartAddition_AddingUnregisteredProduct_EmptyCartRemainsEmptyAfterAddingUnregisteredProduct)
 {
     Registry registry;
     Cart cart;
@@ -26,7 +26,7 @@ TEST(
     EXPECT_EQ(cart.getEntryCount(), 0);
 }
 
-TEST(KasaTests, ProductCartAddition_AddProductOfDuplicateId_ProductAddedToCart)
+TEST(KasaTests, CartAddition_AddProductOfDuplicateId_ProductAddedToCart)
 {
     Registry registry;
     Cart cart;
@@ -37,9 +37,8 @@ TEST(KasaTests, ProductCartAddition_AddProductOfDuplicateId_ProductAddedToCart)
     EXPECT_EQ(cart.getEntryCount(), 2);
 }
 
-TEST(
-  KasaTests,
-  ProductCartAddition_RandomizedProductCount_CartSizeMatchesGeneratedProductCount)
+TEST(KasaTests,
+     CartAddition_RandomizedProductCount_CartSizeMatchesGeneratedProductCount)
 {
     Registry registry;
     Cart cart;
@@ -58,7 +57,7 @@ TEST(
 
 TEST(
   KasaTests,
-  ProductCartDeletion_DeletingRegisteredProduct_PopulatedCartDeincrementsSizeWhenDeletingRegisteredProduct)
+  CartDeletion_DeletingRegisteredProduct_PopulatedCartDeincrementsSizeWhenDeletingRegisteredProduct)
 {
     Registry registry;
     Cart cart;
@@ -71,7 +70,7 @@ TEST(
 
 TEST(
   KasaTests,
-  ProductCartDeletion_DeletingRegisteredProductFromEmptyCart_EmptyCartDoesNotChangeSizeWhenDeletingRegisteredProduct)
+  CartDeletion_DeletingRegisteredProductFromEmptyCart_EmptyCartDoesNotChangeSizeWhenDeletingRegisteredProduct)
 {
     Registry registry;
     Cart cart;
@@ -83,7 +82,7 @@ TEST(
 
 TEST(
   KasaTests,
-  ProductCartDeletion_DeletingUnregisteredProduct_PopulatedCartSizeStaysTheSameWhenDeletingUnregisteredProduct)
+  CartDeletion_DeletingUnregisteredProduct_PopulatedCartSizeStaysTheSameWhenDeletingUnregisteredProduct)
 {
     Registry registry;
     Cart cart;
@@ -94,9 +93,48 @@ TEST(
     EXPECT_EQ(cart.getEntryCount(), 1);
 }
 
+TEST(KasaTests,
+     CartTotalCalculation_EmptyCartValue_EmptyCartShouldBeWorthNothing)
+{
+    Registry registry;
+    Cart cart;
+    EXPECT_EQ(cart.calculateValue(registry), 0.0);
+}
+
+TEST(KasaTests,
+     CartTotalCalculation_VariableCartValue_CartShouldDisplayCorrectValue)
+{
+    Registry registry;
+    Cart cart;
+
+    registry.add(Product(1, "apple", 5.00));
+    registry.add(Product(2, "banana", 6.00));
+    registry.add(Product(3, "kiwi", 3.00));
+    cart.add(registry, 1);
+    cart.add(registry, 2);
+    cart.add(registry, 3);
+    EXPECT_EQ(cart.calculateValue(registry), 5.00 + 6.00 + 3.00);
+}
+
 TEST(
   KasaTests,
-  ProductCartTotalCalcuation_ExampleCartTotalCalculation_ProperlyCalculateExampleCart)
+  CartTotalCalculation_CartValueUpdate_CartValueShouldUpdateCorrectlyAfterChange)
+{
+    Registry registry;
+    Cart cart;
+    registry.add(Product(1, "apple", 5.00));
+    registry.add(Product(2, "banana", 6.00));
+    cart.add(registry, 1);
+    cart.add(registry, 2);
+    double value0 = cart.calculateValue(registry);
+    cart.del(1);
+    double value1 = cart.calculateValue(registry);
+    EXPECT_EQ(value1 - value0, -5.00);
+}
+
+TEST(
+  KasaTests,
+  CartTotalCalculation_ExampleCartTotalCalculation_ProperlyCalculateExampleCart)
 {
     Registry registry;
     registry.add(Product(1, "apple", 5.00));
@@ -117,7 +155,18 @@ TEST(
 
 TEST(
   KasaTests,
-  ProductCartTotalCalcuation_ExampleCartTotalCalculationWithDiscount_ProperlyCalculateExampleCartWithDiscount)
+  CartTotalCalculation_CartTotalCalculationWithFreeItem_ProperlyCalculateCartToZero)
+{
+    Registry registry;
+    registry.add(Product(1, "apple", 0.00));
+    Cart cart;
+    cart.add(registry, 1);
+    EXPECT_EQ(cart.calculateValue(registry), 0.00);
+}
+
+TEST(
+  KasaTests,
+  CartTotalCalculation_ExampleCartTotalCalculationWithDiscount_ProperlyCalculateExampleCartWithDiscount)
 {
     Registry registry;
     registry.add(Product(1, "apple", 5.00));
@@ -142,7 +191,7 @@ TEST(
 
 TEST(
   KasaTests,
-  ProductCartTotalCalcuation_ExampleCartTotalCalculationWithBulk_ProperlyCalculateExampleCartWithBulk)
+  CartTotalCalculation_ExampleCartTotalCalculationWithBulk_ProperlyCalculateExampleCartWithBulk)
 {
     Registry registry;
     registry.add(Product(1, "apple", 5.00));
@@ -169,7 +218,7 @@ TEST(
 
 TEST(
   KasaTests,
-  ProductCartClosing_RandomizedCartLengthClosing_CartIsFullyEmptiedByDeletingEveryProductIdentifier)
+  CartClosing_RandomizedCartLengthClosing_CartIsFullyEmptiedByDeletingEveryProductIdentifier)
 {
     Registry registry;
     registry.add(Product(1, "apple", 5.00));
@@ -186,4 +235,24 @@ TEST(
     cart.close(registry);
 
     EXPECT_EQ(cart.getEntryCount(), 0);
+}
+
+TEST(KasaTests,
+     CartClosing_RandomizedCartValueClosing_CartValueIsZeroAfterClosing)
+{
+    Registry registry;
+    registry.add(Product(1, "apple", 5.00));
+    Cart cart;
+    std::random_device my_random_device;
+    std::mt19937 my_generator(my_random_device());
+    std::uniform_int_distribution<> distr(1, 100);
+    int random_product_count = distr(my_generator);
+
+    for (int _ = 0; _ < random_product_count; ++_)
+    {
+        cart.add(registry, 1);
+    }
+    cart.close(registry);
+
+    EXPECT_EQ(cart.calculateValue(registry), 0.00);
 }
