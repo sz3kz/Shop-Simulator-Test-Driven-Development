@@ -34,18 +34,18 @@ void Registry::update_promotion_status()
     }
 }
 
-void Registry::add_promotion(long identity, double discount)
+void Registry::add_promotion(long identifier, double discount)
 {
     // Registers a DISCOUNT-type promotion.
     // Only if identifier is of a registered product.
-    auto iterator = contents.find(identity);
+    auto iterator = contents.find(identifier);
     if (iterator == contents.end())
     {
         return;
     }
     promotions.emplace(
-      identity,
-      Promotion(identity, PromotionType::DISCOUNT, discount, 0, false));
+      identifier,
+      Promotion(identifier, PromotionType::DISCOUNT, discount, 0, false));
 }
 
 /**
@@ -54,47 +54,48 @@ void Registry::add_promotion(long identity, double discount)
  * associated with the provided product identifier. The promotion is only
  * added if the product ID already exists within the registry's contents.
  * #AIGenerated
- * * @param identity The unique long identifier of the product to receive the
+ * * @param identifier The unique long identifier of the product to receive the
  * promotion.
  * @param nth_free An integer specifying the "buy N, get one free" threshold
  * (e.g., if nth_free is 3, every 3rd item is free).
- * * @note If the @p identity is not found in the @c contents map, the function
- * returns silently without adding a promotion.
+ * * @note If the @p identifier is not found in the @c contents map, the
+ * function returns silently without adding a promotion.
  * * @see Promotion, PromotionType
  */
-void Registry::add_promotion(long identity, int nth_free)
+void Registry::add_promotion(long identifier, int nth_free)
 {
-    auto iterator = contents.find(identity);
+    auto iterator = contents.find(identifier);
     if (iterator == contents.end())
     {
         return;
     }
     promotions.emplace(
-      identity, Promotion(identity, PromotionType::BULK, 0.0, nth_free, false));
+      identifier,
+      Promotion(identifier, PromotionType::BULK, 0.0, nth_free, false));
 }
 
-void Registry::activate_promotion(long identity)
+void Registry::activate_promotion(long identifier)
 {
-    auto iterator = promotions.find(identity);
+    auto iterator = promotions.find(identifier);
     if (iterator == promotions.end())
     {
         return;
     }
     Promotion promotion = iterator->second;
     promotion.is_active = true;
-    promotions[identity] = promotion;
+    promotions[identifier] = promotion;
 }
 
-void Registry::deactivate_promotion(long identity)
+void Registry::deactivate_promotion(long identifier)
 {
-    auto iterator = promotions.find(identity);
+    auto iterator = promotions.find(identifier);
     if (iterator == promotions.end())
     {
         return;
     }
     Promotion promotion = iterator->second;
     promotion.is_active = false;
-    promotions[identity] = promotion;
+    promotions[identifier] = promotion;
 }
 
 void Registry::del(long identifier)

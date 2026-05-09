@@ -4,7 +4,7 @@
 
 struct Promotion
 {
-    long identity{ 0 };
+    long identifier{ 0 };
     PromotionType type;
     double discount{ 0.0 };
     int nth_free{ 0 };

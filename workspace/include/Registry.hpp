@@ -11,10 +11,10 @@ struct Registry
     void add(struct Product const& product);
     void activate_loyalty_card();
     void deactivate_loyalty_card();
-    void add_promotion(long identity, double discount);
-    void add_promotion(long identity, int nth_free);
-    void activate_promotion(long identity);
-    void deactivate_promotion(long identity);
+    void add_promotion(long identifier, double discount);
+    void add_promotion(long identifier, int nth_free);
+    void activate_promotion(long identifier);
+    void deactivate_promotion(long identifier);
     void update_promotion_status();
     void del(long identifier);
     [[nodiscard]] auto getEntryCount() const -> size_t;
