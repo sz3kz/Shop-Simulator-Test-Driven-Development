@@ -29,12 +29,10 @@ TEST(KasaTests,
     Registry registry;
     long duplicate_identifier = 1;
     double random_price = 67.00;
-    struct Product product_a(
-      duplicate_identifier, "MyUniqueProduct", random_price);
-    struct Product product_b(
-      duplicate_identifier, "AnotherTotallyDifferentProduct", random_price);
-    registry.add(product_a);
-    registry.add(product_b);
+    registry.add(
+      Product(duplicate_identifier, "MyUniqueProduct", random_price));
+    registry.add(Product(
+      duplicate_identifier, "AnotherTotallyDifferentProduct", random_price));
     EXPECT_EQ(registry.getEntryCount(), 1);
 }
 
