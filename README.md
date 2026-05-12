@@ -5,8 +5,8 @@ Cash Register Functionality Implementation via Test Driven Development.
 
 1. Clone the repository
 ```bash
-git clone git@github.com:sz3kz/tdd-dummy.git
-cd tdd-dummy/workspace
+git clone git@github.com:sz3kz/PARO2026-CPP-Test-Driven-Development.git
+cd PARO2026-CPP-Test-Driven-Development/workspace/
 ```
 2. Depending how you want to use it:
 #### Raw
