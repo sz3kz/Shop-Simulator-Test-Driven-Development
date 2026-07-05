@@ -5,8 +5,8 @@ Cash Register Functionality Implementation via Test Driven Development.
 
 1. Clone the repository
 ```bash
-git clone git@github.com:sz3kz/PARO2026-CPP-Test-Driven-Development.git
-cd PARO2026-CPP-Test-Driven-Development/workspace/
+git clone git@github.com:sz3kz/Shop-Simulator-Test-Driven-Development.git 
+cd Shop-Simulator-Test-Driven-Development/workspace/
 ```
 2. Depending how you want to use it:
 #### Raw
@@ -18,19 +18,6 @@ cmake -S . -B build/ -G "Ninja"
 cd build/
 ninja run_tests
 ```
-### Docker/Podman
-**UNTESTED**
-If you want a different (for example: never) compiler or don't want to install additional software on your system beyond Podman or Docker
-
-1. Get inside repo
-> cd MyAwesomeProject
-2. Get the gcc image with cmake and ninja ready:
-> podman build . -t=gcc_latest
-3. Start interactive shell in the container and mount the workspace. Build folder will live and die with the container
-> podman run --mount type=bind,source=`pwd`/workspace,destination=/workspace -p 2222:2222 --rm -it gcc_latest
-4. Run Cmake
-> cmake -G"Ninja" /workspace
-
 ### Compilation + tests
 To compile and run the tests just
 > make run_tests
@@ -38,11 +25,3 @@ To compile and run the tests just
 or
 
 > ninja run_tests
-
-depending which generator was used earlier.
-
-Initially there should be a single test failing, named testFailedSuccesfully
-
-You can remove `src/sampleTests.cpp` form `sample_tests` binary definition in `workspace/CMakeLists.txt` to get rid of unnecessary noise.
-
-Happy coding!
